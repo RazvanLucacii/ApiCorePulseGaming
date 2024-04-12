@@ -71,11 +71,11 @@ namespace ApiCorePulseGaming.Repositories
             this.context.Database.ExecuteSqlRaw(sql, pamIdJuego, pamNombre, pamIDGenero, pamImagen, pamPrecio, pamDescripcion, pamIDEditor);
         }
 
-        public void DeleteJuego(int idjuego)
+        public async Task DeleteJuegoAsync(int idjuego)
         {
-            string sql = "SP_DELETE_JUEGO @IDJuego";
-            SqlParameter pamid = new SqlParameter("@IDJuego", idjuego);
-            this.context.Database.ExecuteSqlRaw(sql, pamid);
+            Juego juego = await this.FindJuegoAsync(idjuego);
+            this.context.Juegos.Remove(juego);
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<List<Genero>> GetGenerosAsync()
@@ -98,32 +98,36 @@ namespace ApiCorePulseGaming.Repositories
             return await this.context.Editores.FirstOrDefaultAsync(z => z.IDEditor == idEditor);
         }
 
-        public void CrearGenero(string nombre)
+        public async Task CrearGeneroAsync(int id, string nombre)
         {
-            string sql = "SP_CREATE_GENERO @NombreGenero";
-            SqlParameter pamNombre = new SqlParameter("NombreGenero", nombre);
-            this.context.Database.ExecuteSqlRaw(sql, pamNombre);
+            Genero genero = new Genero();
+            genero.IdGenero = id;
+            genero.NombreGenero = nombre;
+            this.context.Generos.Add(genero);
+            await this.context.SaveChangesAsync();
         }
 
-        public void CrearEditor(string nombre)
+        public async Task CrearEditorAsync(int id, string nombre)
         {
-            string sql = "SP_CREATE_EDITOR @NombreEditor";
-            SqlParameter pamNombre = new SqlParameter("NombreEditor", nombre);
-            this.context.Database.ExecuteSqlRaw(sql, pamNombre);
+            Editor editor = new Editor();
+            editor.IDEditor = id;
+            editor.NombreEditor = nombre;
+            this.context.Editores.Add(editor);
+            await this.context.SaveChangesAsync();
         }
 
-        public void DeleteGenero(int idGenero)
+        public async Task DeleteGeneroAsync(int idGenero)
         {
-            string sql = "SP_DELETE_GENERO @IDGenero";
-            SqlParameter pamid = new SqlParameter("@IDGenero", idGenero);
-            this.context.Database.ExecuteSqlRaw(sql, pamid);
+            Genero genero = await this.FindGeneroAsync(idGenero);
+            this.context.Generos.Remove(genero);
+            await this.context.SaveChangesAsync();
         }
 
-        public void DeleteEditor(int idEditor)
+        public async Task DeleteEditorAsync(int idEditor)
         {
-            string sql = "SP_DELETE_EDITOR @IDEditor";
-            SqlParameter pamid = new SqlParameter("@IDEditor", idEditor);
-            this.context.Database.ExecuteSqlRaw(sql, pamid);
+            Editor editor = await this.FindEditorAsync(idEditor);
+            this.context.Editores.Remove(editor);
+            await this.context.SaveChangesAsync();
         }
 
         public void ModificarGenero(int idGenero, string nombre)

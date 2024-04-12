@@ -22,6 +22,12 @@ namespace ApiCorePulseGaming.Controllers
             return await this.repo.GetJuegosAsync();
         }
 
+        [HttpGet("[action]/{posicion}")]
+        public async Task<ActionResult<List<Juego>>> GetPaginacionJuegos(int posicion)
+        {
+            return await this.repo.GetGrupoJuegosAsync(posicion);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Juego>> GetJuego(int id)
         {
@@ -29,10 +35,11 @@ namespace ApiCorePulseGaming.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public async Task<ActionResult<List<Juego>>> GetJuegosCategorias(int id)
+        public async Task<ActionResult<List<Juego>>> GetJuegosGeneros(int id)
         {
             return await this.repo.GetJuegosGenerosAsync(id);
         }
+
 
     }
 }

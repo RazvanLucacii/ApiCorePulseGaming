@@ -21,6 +21,7 @@ builder.Services.AddSwaggerGen(options =>
 
 string connectionString = builder.Configuration.GetConnectionString("SqlAzure");
 builder.Services.AddTransient<IRepositoryJuegos, RepositoryJuegos>();
+builder.Services.AddTransient<IRepositoryUsuarios, RepositoryUsuarios>();
 builder.Services.AddDbContext<JuegosContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
