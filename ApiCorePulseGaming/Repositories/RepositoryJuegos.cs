@@ -21,14 +21,14 @@ namespace ApiCorePulseGaming.Repositories
             return await consulta.ToListAsync();
         }
 
-        public List<Juego> GetJuegosPrecioAsce()
+        public async Task<List<Juego>> GetJuegosPrecioAsceAsync()
         {
-            return this.context.Juegos.OrderBy(z => z.PrecioJuego).ToList();
+            return await this.context.Juegos.OrderBy(z => z.PrecioJuego).ToListAsync();
         }
 
-        public List<Juego> GetJuegosPrecioDesc()
+        public async Task<List<Juego>> GetJuegosPrecioDescAsync()
         {
-            return this.context.Juegos.OrderByDescending(z => z.PrecioJuego).ToList();
+            return await this.context.Juegos.OrderByDescending(z => z.PrecioJuego).ToListAsync();
         }
 
         public async Task<List<Juego>> GetJuegosGenerosAsync(int idgenero)
@@ -58,17 +58,16 @@ namespace ApiCorePulseGaming.Repositories
 
         }
 
-        public void ModificarJuego(int idJuego, string nombre, int idGenero, string imagen, double precio, string descripcion, int idEditor)
+        public async Task ModificarJuegoAsync(int idJuego, string nombre, int idGenero, string imagen, double precio, string descripcion, int idEditor)
         {
-            string sql = "SP_MODIFICAR_JUEGO @IDJuego, @NombreJuego, @IDGenero, @ImagenJuego, @PrecioJuego, @Descripcion, @IDEditor";
-            SqlParameter pamIdJuego = new SqlParameter("IDJuego", idJuego);
-            SqlParameter pamNombre = new SqlParameter("NombreJuego", nombre);
-            SqlParameter pamIDGenero = new SqlParameter("IDGenero", idGenero);
-            SqlParameter pamImagen = new SqlParameter("ImagenJuego", imagen);
-            SqlParameter pamPrecio = new SqlParameter("PrecioJuego", precio);
-            SqlParameter pamDescripcion = new SqlParameter("Descripcion", descripcion);
-            SqlParameter pamIDEditor = new SqlParameter("IDEditor", idEditor);
-            this.context.Database.ExecuteSqlRaw(sql, pamIdJuego, pamNombre, pamIDGenero, pamImagen, pamPrecio, pamDescripcion, pamIDEditor);
+            Juego juego = await this.FindJuegoAsync(idJuego);
+            juego.NombreJuego = nombre;
+            juego.IDGenero = idGenero;
+            juego.ImagenJuego = imagen;
+            juego.PrecioJuego = precio;
+            juego.Descripcion = descripcion;
+            juego.IdEditor = idEditor;
+            await this.context.SaveChangesAsync();
         }
 
         public async Task DeleteJuegoAsync(int idjuego)
@@ -130,20 +129,18 @@ namespace ApiCorePulseGaming.Repositories
             await this.context.SaveChangesAsync();
         }
 
-        public void ModificarGenero(int idGenero, string nombre)
+        public async Task ModificarGeneroAsync(int idGenero, string nombre)
         {
-            string sql = "SP_MODIFICAR_GENERO @IDGenero, @NombreGenero";
-            SqlParameter pamId = new SqlParameter("IDGenero", idGenero);
-            SqlParameter pamNombre = new SqlParameter("NombreGenero", nombre);
-            this.context.Database.ExecuteSqlRaw(sql, pamId, pamNombre);
+            Genero genero = await this.FindGeneroAsync(idGenero);
+            genero.NombreGenero = nombre;
+            await this.context.SaveChangesAsync();
         }
 
-        public void ModificarEditor(int idEditor, string nombre)
+        public async Task ModificarEditorAsync(int idEditor, string nombre)
         {
-            string sql = "SP_MODIFICAR_EDITOR @IDEditor, @NombreEditor";
-            SqlParameter pamId = new SqlParameter("IDEditor", idEditor);
-            SqlParameter pamNombre = new SqlParameter("NombreEditor", nombre);
-            this.context.Database.ExecuteSqlRaw(sql, pamId, pamNombre);
+            Editor editor = await this.FindEditorAsync(idEditor);
+            editor.NombreEditor = nombre;
+            await this.context.SaveChangesAsync();
         }
 
 

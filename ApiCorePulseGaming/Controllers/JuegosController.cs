@@ -40,6 +40,16 @@ namespace ApiCorePulseGaming.Controllers
             return await this.repo.GetJuegosGenerosAsync(id);
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult<List<Juego>>> GetJuegosPrecioDesc()
+        {
+            return await this.repo.GetJuegosPrecioDescAsync();
+        }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult<List<Juego>>> GetJuegosPrecioAsce()
+        {
+            return await this.repo.GetJuegosPrecioAsceAsync();
+        }
     }
 }

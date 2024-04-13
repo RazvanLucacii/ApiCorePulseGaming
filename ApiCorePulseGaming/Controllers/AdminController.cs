@@ -93,5 +93,91 @@ namespace ApiCorePulseGaming.Controllers
             await this.repo.RegistrarJuego(juego.NombreJuego, juego.IDGenero, juego.ImagenJuego, juego.PrecioJuego, juego.Descripcion, juego.IdEditor);
             return Ok();
         }
+
+        [HttpPut("[action]")]
+        public async Task<ActionResult> UpdateJuego(Juego juego)
+        {
+            await this.repo.ModificarJuegoAsync(juego.IdJuego, juego.NombreJuego, juego.IDGenero, juego.ImagenJuego, juego.PrecioJuego, juego.Descripcion, juego.IdEditor);
+            return Ok();
+        }
+
+        [HttpPut("[action]")]
+        public async Task<ActionResult> UpdateEditor(Editor editor)
+        {
+            await this.repo.ModificarEditorAsync(editor.IDEditor, editor.NombreEditor);
+            return Ok();
+        }
+
+        [HttpPut("[action]")]
+        public async Task<ActionResult> UpdateGenero(Genero genero)
+        {
+            await this.repo.ModificarGeneroAsync(genero.IdGenero, genero.NombreGenero);
+            return Ok();
+        }
+
+        [HttpPut("[action]")]
+        public async Task<ActionResult> UpdateUsuario(Usuario usu)
+        {
+            await this.repoUsuarios.ModificarUsuarioAsync(usu.IdUsuario, usu.Nombre, usu.Apellidos, usu.Email, usu.Password.ToString(), usu.Telefono, usu.IDRole);
+            return Ok();
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<ActionResult> DeleteJuego(int id)
+        {
+            if (await this.repo.FindJuegoAsync(id) == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.repo.DeleteJuegoAsync(id);
+                return Ok();
+            }
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<ActionResult> DeleteGenero(int id)
+        {
+            if (await this.repo.FindGeneroAsync(id) == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.repo.DeleteGeneroAsync(id);
+                return Ok();
+            }
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<ActionResult> DeleteEditor(int id)
+        {
+            if (await this.repo.FindEditorAsync(id) == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.repo.DeleteEditorAsync(id);
+                return Ok();
+            }
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<ActionResult> DeleteUsuario(int id)
+        {
+            if (await this.repoUsuarios.FindUsuarioByIdAsync(id) == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.repoUsuarios.DeleteUsuarioAsync(id);
+                return Ok();
+            }
+        }
+
+
     }
 }
