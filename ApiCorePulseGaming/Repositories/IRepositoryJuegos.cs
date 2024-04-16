@@ -25,7 +25,10 @@ namespace ApiCorePulseGaming.Repositories
         Task<Genero> FindGeneroAsync(int idGenero);
         Task<int> GetNumeroJuegosAsync();
         Task<List<Juego>> GetGrupoJuegosAsync(int posicion);
-        void InsertarPedido(DateTime fecha, string ciudad, string pais, int idusuario, double total);
-        void InsertarDetallePedido(int idjuego, double total, int cantidad, int idpedido);
+        Task<List<Juego>> GetProductosEnCarritoAsync(List<int> idsJuegos);
+        Task<Pedido> CreatePedidoAsync(int idusuario, List<Juego> carrito);
+        Task<List<DetallePedidoView>> GetProductosPedidoUsuarioAsync(int idUsuario);
+        Task<int> GetMaxIdDetallePedidoAsync();
+        Task<int> GetMaxIdPedidoAsync();
     }
 }

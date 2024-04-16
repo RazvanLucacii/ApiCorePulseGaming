@@ -51,5 +51,37 @@ namespace ApiCorePulseGaming.Controllers
         {
             return await this.repo.GetJuegosPrecioAsceAsync();
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<List<Juego>>> GetProductosCarrito([FromQuery] List<int> idsJuegos)
+        {
+            return await this.repo.GetProductosEnCarritoAsync(idsJuegos);
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<List<DetallePedidoView>>> GetProductosPedidoUsuario(int id)
+        {
+            return await this.repo.GetProductosPedidoUsuarioAsync(id);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<int>> GetMaxIdDetallePedido()
+        {
+            return await this.repo.GetMaxIdDetallePedidoAsync();
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<int>> GetMaxIdPedido()
+        {
+            return await this.repo.GetMaxIdPedidoAsync();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> InsertPedido(Pedido pedido, List<Juego> carrito)
+        {
+            await this.repo.CreatePedidoAsync(pedido.IDUsuario, carrito);
+            return Ok();
+        }
     }
 }

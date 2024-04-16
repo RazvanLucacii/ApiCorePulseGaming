@@ -157,24 +157,29 @@ namespace ApiCorePulseGaming.Repositories
             return await this.context.Juegos.CountAsync();
         }
 
-        public void InsertarPedido(DateTime fecha, string ciudad, string pais, int idusuario, double total)
+        public Task<List<Juego>> GetProductosEnCarritoAsync(List<int> idsJuegos)
         {
-            string sql = "SP_INSERT_PEDIDO @FechaPedido, @Ciudad, @Pais, @IDUsuario, @Total";
-            SqlParameter pamFecha = new SqlParameter("FechaPedido", fecha);
-            SqlParameter pamCiudad = new SqlParameter("Ciudad", ciudad);
-            SqlParameter pamPais = new SqlParameter("Pais", pais);
-            SqlParameter pamIdUsu = new SqlParameter("IDUsuario", idusuario);
-            SqlParameter pamTotal = new SqlParameter("Total", total);
-            this.context.Database.ExecuteSqlRaw(sql, pamFecha, pamCiudad, pamPais, pamIdUsu, pamTotal);
+            throw new NotImplementedException();
         }
-        public void InsertarDetallePedido(int idjuego, double total, int cantidad, int idpedido)
+
+        public Task<Pedido> CreatePedidoAsync(int idusuario, List<Juego> carrito)
         {
-            string sql = "SP_INSERT_DETALLE_PEDIDO @IDJuego, @Total, @Cantidad, @IDPedido";
-            SqlParameter pamidjuego = new SqlParameter("IDJuego", idjuego);
-            SqlParameter pamtotal = new SqlParameter("Total", total);
-            SqlParameter pamcantidad = new SqlParameter("Cantidad", cantidad);
-            SqlParameter pamidpedido = new SqlParameter("IDPedido", idpedido);
-            this.context.Database.ExecuteSqlRaw(sql, pamidjuego, pamtotal, pamcantidad, pamidpedido);
+            throw new NotImplementedException();
+        }
+
+        public Task<List<DetallePedidoView>> GetProductosPedidoUsuarioAsync(int idUsuario)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetMaxIdDetallePedidoAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetMaxIdPedidoAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
