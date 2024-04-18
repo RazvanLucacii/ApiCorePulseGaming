@@ -78,7 +78,7 @@ namespace ApiCorePulseGaming.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> InsertPedido(Pedido pedido, List<Juego> carrito)
+        public async Task<ActionResult> InsertPedido([FromQuery] Pedido pedido, List<Juego> carrito)
         {
             await this.repo.CreatePedidoAsync(pedido.IDUsuario, carrito);
             return Ok();
