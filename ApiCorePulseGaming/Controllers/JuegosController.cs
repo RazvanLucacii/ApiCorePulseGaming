@@ -52,11 +52,10 @@ namespace ApiCorePulseGaming.Controllers
             return await this.repo.GetJuegosPrecioAsceAsync();
         }
 
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<ActionResult<List<Juego>>> GetProductosCarrito([FromQuery] List<int> idsJuegos)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<int>> GetNumeroJuegos()
         {
-            return await this.repo.GetProductosEnCarritoAsync(idsJuegos);
+            return await this.repo.GetNumeroJuegosAsync();
         }
 
         [HttpGet("[action]/{id}")]

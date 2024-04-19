@@ -16,9 +16,7 @@ namespace ApiCorePulseGaming.Repositories
 
         public async Task<List<Juego>> GetJuegosAsync()
         {
-            string sql = "SP_TODOS_JUEGOS";
-            var consulta = this.context.Juegos.FromSqlRaw(sql);
-            return await consulta.ToListAsync();
+            return await this.context.Juegos.ToListAsync();
         }
 
         public async Task<List<Juego>> GetJuegosPrecioAsceAsync()
@@ -40,12 +38,24 @@ namespace ApiCorePulseGaming.Repositories
             return juegos;
         }
 
+        public async Task<List<Juego>> GetJuegosSessionAsync(List<int> juegos)
+        {
+            return await this.context.Juegos
+                .Where(c => juegos.Contains(c.IdJuego))
+                .ToListAsync();
+        }
+
+        public async Task<int> GetNumeroJuegosAsync()
+        {
+            return await this.context.Juegos.CountAsync();
+        }
+
         public async Task<Juego> FindJuegoAsync(int IdJuego)
         {
             return await this.context.Juegos.FirstOrDefaultAsync(z => z.IdJuego == IdJuego);
         }
 
-        public async Task RegistrarJuego(string nombre, int idGenero, string imagen, double precio, string descripcion, int idEditor)
+        public async Task RegistrarJuego(string nombre, int idGenero, string imagen, decimal precio, string descripcion, int idEditor)
         {
             string sql = "SP_INSERT_JUEGO @NombreJuego, @IDGenero, @Imagen, @Precio, @Descripcion, @IDEditor";
             SqlParameter pamNombre = new SqlParameter("NombreJuego", nombre);
@@ -58,7 +68,7 @@ namespace ApiCorePulseGaming.Repositories
 
         }
 
-        public async Task ModificarJuegoAsync(int idJuego, string nombre, int idGenero, string imagen, double precio, string descripcion, int idEditor)
+        public async Task ModificarJuegoAsync(int idJuego, string nombre, int idGenero, string imagen, decimal precio, string descripcion, int idEditor)
         {
             Juego juego = await this.FindJuegoAsync(idJuego);
             juego.NombreJuego = nombre;
@@ -152,34 +162,74 @@ namespace ApiCorePulseGaming.Repositories
             return await consulta.ToListAsync();
         }
 
-        public async Task<int> GetNumeroJuegosAsync()
+        public async Task<Pedido> CreatePedidoAsync(int idusuario, List<Juego> carrito)
         {
-            return await this.context.Juegos.CountAsync();
+            var total = 0.0m;
+            foreach (Juego juego in carrito)
+            {
+                total = juego.PrecioJuego + total;
+            }
+            Pedido pedido = new Pedido
+            {
+                IDPedido = await GetMaxIdPedidoAsync(),
+                IDUsuario = idusuario,
+                FechaPedido = DateTime.Now,
+                Total = total
+            };
+            await this.context.Pedidos.AddAsync(pedido);
+            await this.context.SaveChangesAsync();
+
+            foreach (Juego p in carrito)
+            {
+                DetallesPedido detalle = new DetallesPedido
+                {
+                    IDDetallePedido = await GetMaxIdDetallePedidoAsync(),
+                    IDPedido = pedido.IDPedido,
+                    IDJuego = p.IdJuego,
+                    Cantidad = 1,
+                    PrecioUnitario = p.PrecioJuego
+                };
+
+                // Verificar si ya existe un DetallePedido con el mismo IdDetallePedido
+                DetallesPedido existingDetalle = await this.context.DetallePedidos.FindAsync(detalle.IDDetallePedido);
+                if (existingDetalle != null)
+                {
+                    // Actualizar el DetallePedido existente si es necesario
+                    existingDetalle.IDPedido = detalle.IDPedido;
+                    existingDetalle.IDJuego = detalle.IDJuego;
+                    existingDetalle.Cantidad = detalle.Cantidad;
+                    existingDetalle.PrecioUnitario = detalle.PrecioUnitario;
+                }
+                else
+                {
+                    // Agregar el nuevo DetallePedido al contexto si no existe
+                    await this.context.AddAsync(detalle);
+                    await this.context.SaveChangesAsync();
+
+                }
+            }
+
+            await this.context.SaveChangesAsync();
+            return pedido;
         }
 
-        public Task<List<Juego>> GetProductosEnCarritoAsync(List<int> idsJuegos)
+        public async Task<List<DetallePedidoView>> GetProductosPedidoUsuarioAsync(int idUsuario)
         {
-            throw new NotImplementedException();
+            return await context.DetallePedidoViews
+                .Where(d => d.IdUsuario == idUsuario)
+                .ToListAsync();
         }
 
-        public Task<Pedido> CreatePedidoAsync(int idusuario, List<Juego> carrito)
+        public async Task<int> GetMaxIdDetallePedidoAsync()
         {
-            throw new NotImplementedException();
+            if (this.context.DetallePedidos.Count() == 0) return 1;
+            return await this.context.DetallePedidos.MaxAsync(x => x.IDDetallePedido) + 1;
         }
 
-        public Task<List<DetallePedidoView>> GetProductosPedidoUsuarioAsync(int idUsuario)
+        public async Task<int> GetMaxIdPedidoAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> GetMaxIdDetallePedidoAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> GetMaxIdPedidoAsync()
-        {
-            throw new NotImplementedException();
+            if (this.context.Pedidos.Count() == 0) return 1;
+            return await this.context.Pedidos.MaxAsync(x => x.IDPedido) + 1;
         }
     }
 }
