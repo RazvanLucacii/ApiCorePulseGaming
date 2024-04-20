@@ -1,5 +1,6 @@
 ﻿using ApiCorePulseGaming.Models;
 using ApiCorePulseGaming.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace ApiCorePulseGaming.Controllers
             this.repo = repo;
             this.repoUsuarios = repoUsuarios;
         }
+
 
         [HttpGet("[action]")]
         public async Task<ActionResult<List<Genero>>> GetGeneros()
@@ -60,12 +62,14 @@ namespace ApiCorePulseGaming.Controllers
             return await this.repo.FindGeneroAsync(id);
         }
 
+        [Authorize]
         [HttpGet("[action]/{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
             return await this.repoUsuarios.FindUsuarioByIdAsync(id);
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertUsuario(Usuario usu)
         {
@@ -73,6 +77,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertEditor(Editor editor)
         {
@@ -80,6 +85,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertGenero(Genero genero)
         {
@@ -87,6 +93,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertJuego(Juego juego)
         {
@@ -94,6 +101,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateJuego(Juego juego)
         {
@@ -101,6 +109,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateEditor(Editor editor)
         {
@@ -108,6 +117,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateGenero(Genero genero)
         {
@@ -115,6 +125,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateUsuario(Usuario usu)
         {
@@ -122,6 +133,7 @@ namespace ApiCorePulseGaming.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public async Task<ActionResult> DeleteJuego(int id)
         {
@@ -136,6 +148,7 @@ namespace ApiCorePulseGaming.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public async Task<ActionResult> DeleteGenero(int id)
         {
@@ -150,6 +163,7 @@ namespace ApiCorePulseGaming.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public async Task<ActionResult> DeleteEditor(int id)
         {
@@ -164,6 +178,7 @@ namespace ApiCorePulseGaming.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public async Task<ActionResult> DeleteUsuario(int id)
         {
