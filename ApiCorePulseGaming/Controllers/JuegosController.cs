@@ -1,5 +1,6 @@
 ﻿using ApiCorePulseGaming.Models;
 using ApiCorePulseGaming.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -76,6 +77,7 @@ namespace ApiCorePulseGaming.Controllers
             return await this.repo.GetMaxIdPedidoAsync();
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertPedido([FromQuery] Pedido pedido, List<Juego> carrito)
         {

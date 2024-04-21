@@ -36,7 +36,7 @@ namespace ApiCorePulseGaming.Controllers
         [Authorize]
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult<Usuario>> PerfilEmpleado()
+        public async Task<ActionResult<Usuario>> PerfilUsuario()
         {
             Claim claim = HttpContext.User.FindFirst(x => x.Type == "UserData");
             string jsonUsuario = claim.Value;
