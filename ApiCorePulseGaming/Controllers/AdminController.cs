@@ -81,7 +81,7 @@ namespace ApiCorePulseGaming.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertEditor(Editor editor)
         {
-            await this.repo.CrearEditorAsync(editor.IDEditor, editor.NombreEditor);
+            await this.repo.CrearEditorAsync(editor.NombreEditor);
             return Ok();
         }
 

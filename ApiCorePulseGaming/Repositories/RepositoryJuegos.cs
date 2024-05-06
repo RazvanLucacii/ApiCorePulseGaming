@@ -116,10 +116,10 @@ namespace ApiCorePulseGaming.Repositories
             await this.context.SaveChangesAsync();
         }
 
-        public async Task CrearEditorAsync(int id, string nombre)
+        public async Task CrearEditorAsync(string nombre)
         {
             Editor editor = new Editor();
-            editor.IDEditor = id;
+            editor.IDEditor = await this.GetMaxIdEditorAsync();
             editor.NombreEditor = nombre;
             this.context.Editores.Add(editor);
             await this.context.SaveChangesAsync();
@@ -146,9 +146,9 @@ namespace ApiCorePulseGaming.Repositories
             await this.context.SaveChangesAsync();
         }
 
-        public async Task ModificarEditorAsync(int idEditor, string nombre)
+        public async Task ModificarEditorAsync(string nombre)
         {
-            Editor editor = await this.FindEditorAsync(idEditor);
+            Editor editor = await this.FindEditorAsync(await this.GetMaxIdEditorAsync());
             editor.NombreEditor = nombre;
             await this.context.SaveChangesAsync();
         }
@@ -230,6 +230,12 @@ namespace ApiCorePulseGaming.Repositories
         {
             if (this.context.Pedidos.Count() == 0) return 1;
             return await this.context.Pedidos.MaxAsync(x => x.IDPedido) + 1;
+        }
+
+        public async Task<int> GetMaxIdEditorAsync()
+        {
+            if (this.context.Editores.Count() == 0) return 1;
+            return await this.context.Editores.MaxAsync(x => x.IDEditor) + 1;
         }
     }
 }

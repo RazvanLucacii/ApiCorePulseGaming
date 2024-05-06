@@ -72,6 +72,12 @@ namespace ApiCorePulseGaming.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<ActionResult<int>> GetMaxIdEditor()
+        {
+            return await this.repo.GetMaxIdEditorAsync();
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult<int>> GetMaxIdPedido()
         {
             return await this.repo.GetMaxIdPedidoAsync();
