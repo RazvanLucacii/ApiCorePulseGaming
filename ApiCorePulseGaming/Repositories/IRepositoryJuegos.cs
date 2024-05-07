@@ -15,8 +15,8 @@ namespace ApiCorePulseGaming.Repositories
         Task<List<Genero>> GetGenerosAsync();
         Task DeleteJuegoAsync(int idjuego);
         Task ModificarJuegoAsync(int idJuego, string nombre, int idGenero, string imagen, decimal precio, string descripcion, int idEditor);
-        Task CrearEditorAsync(int id, string nombre);
-        Task CrearGeneroAsync(int id, string nombre);
+        Task CrearEditorAsync(string nombre);
+        Task CrearGeneroAsync(string nombre);
         Task ModificarEditorAsync(int idEditor, string nombre);
         Task ModificarGeneroAsync(int idGenero, string nombre);
         Task DeleteEditorAsync(int idEditor);

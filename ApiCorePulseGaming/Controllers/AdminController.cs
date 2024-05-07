@@ -62,7 +62,6 @@ namespace ApiCorePulseGaming.Controllers
             return await this.repo.FindGeneroAsync(id);
         }
 
-        [Authorize]
         [HttpGet("[action]/{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
@@ -81,7 +80,7 @@ namespace ApiCorePulseGaming.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertEditor(Editor editor)
         {
-            await this.repo.CrearEditorAsync(editor.IDEditor, editor.NombreEditor);
+            await this.repo.CrearEditorAsync(editor.NombreEditor);
             return Ok();
         }
 
@@ -89,7 +88,7 @@ namespace ApiCorePulseGaming.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> InsertGenero(Genero genero)
         {
-            await this.repo.CrearGeneroAsync(genero.IdGenero, genero.NombreGenero);
+            await this.repo.CrearGeneroAsync(genero.NombreGenero);
             return Ok();
         }
 

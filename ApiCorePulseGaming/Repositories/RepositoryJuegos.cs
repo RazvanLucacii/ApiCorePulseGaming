@@ -107,19 +107,19 @@ namespace ApiCorePulseGaming.Repositories
             return await this.context.Editores.FirstOrDefaultAsync(z => z.IDEditor == idEditor);
         }
 
-        public async Task CrearGeneroAsync(int id, string nombre)
+        public async Task CrearGeneroAsync(string nombre)
         {
             Genero genero = new Genero();
-            genero.IdGenero = id;
+            genero.IdGenero = await context.Generos.Select(g => g.IdGenero).MaxAsync() + 1;
             genero.NombreGenero = nombre;
             this.context.Generos.Add(genero);
             await this.context.SaveChangesAsync();
         }
 
-        public async Task CrearEditorAsync(int id, string nombre)
+        public async Task CrearEditorAsync(string nombre)
         {
             Editor editor = new Editor();
-            editor.IDEditor = id;
+            editor.IDEditor = await context.Editores.Select(g => g.IDEditor).MaxAsync() + 1;
             editor.NombreEditor = nombre;
             this.context.Editores.Add(editor);
             await this.context.SaveChangesAsync();
